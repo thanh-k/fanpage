@@ -1,0 +1,8 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compiler.javac.arguments": [
+        "-parameters"
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
+}

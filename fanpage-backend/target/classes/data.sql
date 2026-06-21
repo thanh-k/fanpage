@@ -1,0 +1,1 @@
+-- Dữ liệu mẫu chỉ chạy khi bảng trống và id chưa bị trùng.
