@@ -1,0 +1,270 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(186, 230, 253, 0.38), transparent 26%),
+    radial-gradient(circle at top right, rgba(167, 243, 208, 0.22), transparent 20%),
+    linear-gradient(180deg, #f9fdff 0%, #f4fbff 45%, #eff8ff 100%);
+  color: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.7), rgba(45, 212, 191, 0.7));
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+
+html.dark body {
+  background:
+    radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 28%),
+    radial-gradient(circle at top right, rgba(20, 184, 166, 0.12), transparent 22%),
+    linear-gradient(180deg, #0f172a 0%, #111827 55%, #020617 100%);
+  color: #e2e8f0;
+}
+html.dark ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.8); }
+
+/* Dark mode global surface/text fixes
+   Previous dark mode only changed the body/header. These overrides make existing
+   Tailwind utility-heavy screens switch as a whole without rewriting every JSX file. */
+html.dark #root,
+html.dark .min-h-screen,
+html.dark main {
+  background-color: transparent;
+  color: #e5e7eb;
+}
+
+html.dark .bg-white,
+html.dark .bg-white\/90,
+html.dark .bg-white\/95,
+html.dark .bg-white\/85,
+html.dark .bg-white\/80,
+html.dark .bg-white\/70 {
+  background-color: rgba(15, 23, 42, 0.94) !important;
+}
+
+html.dark .bg-slate-50,
+html.dark .bg-slate-50\/50,
+html.dark .bg-slate-50\/60,
+html.dark .bg-slate-50\/70,
+html.dark .bg-slate-100,
+html.dark .bg-slate-100\/80,
+html.dark .bg-sky-50,
+html.dark .bg-sky-50\/40,
+html.dark .bg-rose-50,
+html.dark .bg-emerald-50 {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+}
+
+html.dark .text-slate-950,
+html.dark .text-slate-900,
+html.dark .text-slate-800,
+html.dark .text-slate-700,
+html.dark .text-slate-600 {
+  color: #f8fafc !important;
+}
+
+html.dark .text-slate-500,
+html.dark .text-slate-400 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .placeholder\:text-slate-500::placeholder,
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.dark .border-white,
+html.dark .border-white\/80,
+html.dark .border-white\/70,
+html.dark .border-white\/60,
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-sky-100,
+html.dark .ring-slate-100,
+html.dark .ring-slate-200,
+html.dark .ring-sky-100 {
+  border-color: rgba(71, 85, 105, 0.85) !important;
+  --tw-ring-color: rgba(71, 85, 105, 0.85) !important;
+}
+
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: rgba(30, 41, 59, 0.92) !important;
+  color: #f8fafc !important;
+  border-color: rgba(71, 85, 105, 0.85) !important;
+}
+
+html.dark option {
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+html.dark table,
+html.dark tbody,
+html.dark thead,
+html.dark tr,
+html.dark td,
+html.dark th {
+  border-color: rgba(71, 85, 105, 0.75) !important;
+}
+
+html.dark .shadow-soft,
+html.dark .shadow-sm,
+html.dark .shadow-2xl,
+html.dark .shadow-xl {
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45) !important;
+}
+
+html.dark img,
+html.dark video {
+  color-scheme: dark;
+}
+
+/* Dark mode: fix profile/info cards that use Tailwind gradient backgrounds.
+   Without removing background-image, gradient cards stay very light and text becomes unreadable. */
+html.dark .bg-gradient-to-br,
+html.dark .bg-gradient-to-r,
+html.dark .bg-gradient-to-l,
+html.dark .bg-gradient-to-t,
+html.dark .bg-gradient-to-b {
+  background-image: none !important;
+  background-color: rgba(15, 23, 42, 0.94) !important;
+}
+
+html.dark .from-sky-50,
+html.dark .from-cyan-50,
+html.dark .from-violet-50,
+html.dark .from-amber-50,
+html.dark .from-emerald-50,
+html.dark .to-white {
+  --tw-gradient-from: rgba(15, 23, 42, 0.94) !important;
+  --tw-gradient-to: rgba(15, 23, 42, 0.94) !important;
+  --tw-gradient-stops: rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 0.94) !important;
+}
+
+html.dark .ring-cyan-100,
+html.dark .ring-violet-100,
+html.dark .ring-amber-100,
+html.dark .ring-emerald-100 {
+  --tw-ring-color: rgba(71, 85, 105, 0.85) !important;
+}
+
+/* Auth pages dark mode fixes: keep login/register readable in both themes. */
+html.dark .auth-page {
+  background:
+    radial-gradient(circle at top left, rgba(14, 165, 233, 0.22), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(20, 184, 166, 0.16), transparent 28%),
+    linear-gradient(180deg, #020617 0%, #0f172a 48%, #111827 100%) !important;
+}
+
+html.dark .auth-shell {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border-color: rgba(71, 85, 105, 0.9) !important;
+}
+
+html.dark .auth-hero {
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(45, 212, 191, 0.16), transparent 30%),
+    linear-gradient(135deg, #0f172a 0%, #111827 50%, #020617 100%) !important;
+}
+
+html.dark .auth-form-panel,
+html.dark .auth-register-shell {
+  background: rgba(15, 23, 42, 0.96) !important;
+}
+
+html.dark .auth-page h1,
+html.dark .auth-page h2,
+html.dark .auth-page p,
+html.dark .auth-page label,
+html.dark .auth-page span {
+  color: #f8fafc !important;
+}
+
+html.dark .auth-page .text-slate-500,
+html.dark .auth-page .text-slate-600,
+html.dark .auth-page .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .auth-page .text-sky-600,
+html.dark .auth-page .text-sky-700 {
+  color: #38bdf8 !important;
+}
+
+html.dark .auth-page input,
+html.dark .auth-page select,
+html.dark .auth-page textarea {
+  background: #eaf2ff !important;
+  color: #0f172a !important;
+  border-color: rgba(147, 197, 253, 0.8) !important;
+}
+
+html.dark .auth-page input::placeholder,
+html.dark .auth-page textarea::placeholder {
+  color: #64748b !important;
+}
+
+html.dark .auth-page option {
+  background: #eaf2ff !important;
+  color: #0f172a !important;
+}
+
+html.dark .auth-page button[type="submit"],
+html.dark .auth-page .auth-primary-action {
+  background-image: linear-gradient(90deg, #0ea5e9, #06b6d4, #14b8a6) !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: 0 16px 40px rgba(56, 189, 248, 0.35) !important;
+}
+
+html.dark .auth-page a[href*="google"],
+html.dark .auth-page .google-login-button {
+  background: rgba(15, 23, 42, 0.92) !important;
+  color: #f8fafc !important;
+  border-color: rgba(71, 85, 105, 0.9) !important;
+}
+
+html.dark .auth-page .bg-amber-50 {
+  background: rgba(120, 53, 15, 0.32) !important;
+  color: #fde68a !important;
+  border-color: rgba(245, 158, 11, 0.45) !important;
+}

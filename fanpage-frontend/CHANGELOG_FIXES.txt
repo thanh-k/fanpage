@@ -1,0 +1,31 @@
+Các chỉnh sửa đã thực hiện:
+
+1. Trang chủ - thanh Bạn bè:
+- Thanh Bạn bè bên phải hiển thị tối đa 5 người đã nhắn tin gần nhất.
+- Lấy dữ liệu từ danh sách conversations đã sắp xếp theo lastMessageAt.
+- Khung Bạn bè được ghim sticky khi cuộn trang.
+
+2. Trang chủ - popup chọn cảm xúc:
+- Chỉnh lại khung reaction picker: căn giữa phía trên nút cảm xúc, bo tròn đẹp hơn, padding/gap đều hơn.
+- Tăng kích thước icon, thêm hover nâng icon và shadow.
+
+3. Messenger dropdown:
+- Mặc định chỉ hiển thị 5 đoạn chat mới nhất.
+- Khi cuộn xuống cuối danh sách sẽ hiển thị thêm 5 đoạn chat tiếp theo.
+- Ô "Tìm kiếm trên Messenger" đã đổi thành input thật.
+- Tìm kiếm ưu tiên bạn bè trước, sau đó mới hiển thị kết quả đoạn chat/tin nhắn.
+
+4. Backend:
+- API GET /api/chats/conversations hỗ trợ thêm limit và offset.
+- Giữ tương thích cũ: nếu không truyền limit thì trả về toàn bộ như trước.
+
+2026-06-27 - fixed v5
+- Nút "Quay lại fanpage" từ trang chi tiết bài viết không dùng history back nữa, mà điều hướng về trang chủ kèm targetPostId.
+- Khi ấn "Chi tiết", FE lưu cả vị trí cuộn và id bài viết vừa mở vào sessionStorage.
+- Trang chủ khôi phục về đúng thẻ bài viết đã ấn Chi tiết bằng scrollIntoView; nếu không tìm thấy thẻ bài viết thì fallback về scrollY đã lưu.
+
+Admin update:
+- Nâng cấp Dashboard: thêm card tổng quan, biểu đồ donut cơ cấu tài khoản, biểu đồ cột nội dung/tương tác và kiểm duyệt.
+- Trang /admin/posts chỉ giữ thao tác xóa bài viết.
+- Khi xóa bài viết có modal xác nhận 2 bước, bắt buộc nhập lý do xóa.
+- Gửi reason xuống backend để backend thông báo realtime cho user.
