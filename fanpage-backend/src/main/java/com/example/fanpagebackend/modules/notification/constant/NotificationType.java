@@ -8,6 +8,8 @@ public class NotificationType {
 
     public static final String COMMENT_REPLY = "COMMENT_REPLY";
 
+    public static final String POST_DELETED_BY_ADMIN = "POST_DELETED_BY_ADMIN";
+
     public static final String FOLLOW = "FOLLOW";
 
     private NotificationType() {

@@ -25,6 +25,8 @@ public interface PostService {
 
     PostResponse updateMyPost(Long postId, UpdatePostRequest request);
 
+    PostResponse updateMyPostMultipart(Long postId, String content, Boolean anonymous, List<MultipartFile> images, List<MultipartFile> videos, Boolean keepExistingMedia);
+
     void deleteMyPost(Long postId);
 
     PageResponse<PostResponse> getMyPosts(int page, int size);

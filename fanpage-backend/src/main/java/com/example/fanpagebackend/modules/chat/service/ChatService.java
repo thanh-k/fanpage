@@ -11,7 +11,9 @@ public interface ChatService {
     ChatMessageResponse sendMessage(Long senderId, Long receiverId, SendMessageRequest request);
     List<ChatMessageResponse> getConversation(Long userId, int limit);
     List<ConversationSummaryResponse> getConversations();
+    List<ConversationSummaryResponse> getConversations(int limit, int offset);
     long getUnreadTotal();
     long markConversationAsRead(Long userId);
+    ChatMessageResponse revokeMessage(String messageId);
     String buildConversationId(Long firstUserId, Long secondUserId);
 }

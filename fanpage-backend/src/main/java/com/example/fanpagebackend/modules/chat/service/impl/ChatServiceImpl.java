@@ -124,6 +124,24 @@ public class ChatServiceImpl implements ChatService {
                 .toList();
     }
 
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ConversationSummaryResponse> getConversations(int limit, int offset) {
+        User currentUser = securityUtil.getCurrentUser();
+        int safeLimit = Math.min(Math.max(limit, 1), 50);
+        int safeOffset = Math.max(offset, 0);
+        int page = safeOffset / safeLimit;
+
+        return conversationMongoRepository.findByParticipantIdsContainingOrderByLastMessageAtDesc(
+                        currentUser.getId(),
+                        PageRequest.of(page, safeLimit)
+                )
+                .stream()
+                .map(conversation -> toConversationSummary(conversation, currentUser.getId()))
+                .toList();
+    }
+
     @Override
     @Transactional(readOnly = true)
     public long getUnreadTotal() {
@@ -151,6 +169,23 @@ public class ChatServiceImpl implements ChatService {
         });
         chatMessageMongoRepository.saveAll(unreadMessages);
         return unreadMessages.size();
+    }
+
+    @Override
+    public ChatMessageResponse revokeMessage(String messageId) {
+        User currentUser = securityUtil.getCurrentUser();
+        ChatMessageDocument message = chatMessageMongoRepository.findById(messageId)
+                .orElseThrow(() -> new com.example.fanpagebackend.exception.NotFoundException("Không tìm thấy tin nhắn"));
+
+        if (!message.getSenderId().equals(currentUser.getId())) {
+            throw new ForbiddenException("Bạn chỉ có thể thu hồi tin nhắn của mình");
+        }
+
+        message.setRevoked(true);
+        message.setContent("Tin nhắn đã được thu hồi");
+        message.setRevokedAt(LocalDateTime.now());
+        ChatMessageDocument saved = chatMessageMongoRepository.save(message);
+        return toResponse(saved, currentUser.getId());
     }
 
     @Override
@@ -201,9 +236,10 @@ public class ChatServiceImpl implements ChatService {
                 .id(message.getId())
                 .conversationId(message.getConversationId())
                 .peerId(peerId)
-                .content(message.getContent())
+                .content(message.isRevoked() ? "Tin nhắn đã được thu hồi" : message.getContent())
                 .mine(mine)
                 .read(message.isRead())
+                .revoked(message.isRevoked())
                 .createdAt(message.getCreatedAt())
                 .readAt(message.getReadAt())
                 .build();

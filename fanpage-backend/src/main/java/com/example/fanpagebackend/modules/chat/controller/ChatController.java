@@ -23,8 +23,14 @@ public class ChatController {
     private final ChatPresenceService chatPresenceService;
 
     @GetMapping("/conversations")
-    public ApiResponse<List<ConversationSummaryResponse>> getConversations() {
-        return ApiResponse.success("Lấy danh sách đoạn chat thành công", chatService.getConversations());
+    public ApiResponse<List<ConversationSummaryResponse>> getConversations(
+            @RequestParam(required = false) Integer limit,
+            @RequestParam(defaultValue = "0") int offset
+    ) {
+        List<ConversationSummaryResponse> data = limit == null
+                ? chatService.getConversations()
+                : chatService.getConversations(limit, offset);
+        return ApiResponse.success("Lấy danh sách đoạn chat thành công", data);
     }
 
     @GetMapping("/unread-count")
@@ -35,6 +41,11 @@ public class ChatController {
     @GetMapping("/online-users")
     public ApiResponse<Set<Long>> getOnlineUsers() {
         return ApiResponse.success("Lấy danh sách người dùng online thành công", chatPresenceService.getOnlineUserIds());
+    }
+
+    @PostMapping("/messages/{messageId}/revoke")
+    public ApiResponse<ChatMessageResponse> revokeMessage(@PathVariable String messageId) {
+        return ApiResponse.success("Thu hồi tin nhắn thành công", chatService.revokeMessage(messageId));
     }
 
     @PostMapping("/{userId}/read")

@@ -144,9 +144,10 @@ public class AdminController {
 
     @DeleteMapping("/posts/{postId}")
     @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ROLE_SUPER_ADMIN', 'POST_DELETE')")
-    public ApiResponse<Void> deletePost(@PathVariable("postId") Long postId) { 
-        adminService.deletePost(postId); 
-        return ApiResponse.success("Xóa bài viết thành công", null); 
+    public ApiResponse<Void> deletePost(@PathVariable("postId") Long postId,
+                                        @RequestBody(required = false) AdminDeletePostRequest request) {
+        adminService.deletePost(postId, request == null ? null : request.getReason());
+        return ApiResponse.success("Xóa bài viết thành công và đã gửi thông báo cho người đăng", null);
     }
 
     // --- QUẢN LÝ BÌNH LUẬN (COMMENTS) ---

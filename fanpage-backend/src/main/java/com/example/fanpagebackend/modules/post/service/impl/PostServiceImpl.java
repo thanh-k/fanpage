@@ -211,6 +211,41 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
+    public PostResponse updateMyPostMultipart(Long postId, String content, Boolean anonymous, List<MultipartFile> images, List<MultipartFile> videos, Boolean keepExistingMedia) {
+        User currentUser = securityUtil.getCurrentUser();
+        Post post = getPostEntity(postId);
+
+        if (!post.getAuthor().getId().equals(currentUser.getId())) {
+            throw new ForbiddenException("Bạn không có quyền chỉnh sửa bài viết này");
+        }
+
+        if (profanityFilterService.checkTextViolation(content)) {
+            throw new BadRequestException("Không thể cập nhật! Nội dung sửa đổi chứa ngôn từ không phù hợp quy định.");
+        }
+
+        validateMediaCounts(images, videos);
+        String normalizedContent = normalizeContent(content);
+        boolean hasNewMedia = (images != null && !images.isEmpty()) || (videos != null && !videos.isEmpty());
+        boolean keepOld = Boolean.TRUE.equals(keepExistingMedia);
+        boolean hasOldMedia = keepOld && post.getMediaList() != null && !post.getMediaList().isEmpty();
+
+        if (normalizedContent.isBlank() && !hasNewMedia && !hasOldMedia) {
+            throw new BadRequestException("Bài viết phải có nội dung hoặc ít nhất một ảnh/video");
+        }
+
+        post.setContent(normalizedContent);
+        post.setAnonymous(Boolean.TRUE.equals(anonymous));
+
+        if (!keepOld || hasNewMedia) {
+            addMediaListFromFiles(post, images, videos);
+        }
+
+        Post savedPost = postRepository.save(post);
+        return mapSinglePost(savedPost, currentUser, true);
+    }
+
+    @Override
+    @Transactional
     public void deleteMyPost(Long postId) {
         User currentUser = securityUtil.getCurrentUser();
         Post post = getPostEntity(postId);
@@ -343,7 +378,12 @@ public class PostServiceImpl implements PostService {
     }
 
     private void addMediaListFromFiles(Post post, List<MultipartFile> images, List<MultipartFile> videos) {
-        List<PostMedia> mediaList = new ArrayList<>();
+        List<PostMedia> mediaList = post.getMediaList();
+        if (mediaList == null) {
+            mediaList = new ArrayList<>();
+        } else {
+            mediaList.clear();
+        }
         int sortOrder = 1;
 
         for (MultipartFile image : safeList(images)) {

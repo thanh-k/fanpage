@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -302,10 +303,35 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public void deletePost(Long postId) {
+    public void deletePost(Long postId, String reason) {
         requirePermission(Permission.POST_DELETE);
+        String cleanReason = reason == null ? "" : reason.trim();
+        if (cleanReason.length() < 5) {
+            throw new BadRequestException("Vui lòng nhập lý do xóa bài viết tối thiểu 5 ký tự");
+        }
+
+        User currentAdmin = securityUtil.getCurrentUser();
         Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException("Không tìm thấy bài viết"));
+        User author = post.getAuthor();
+        Long deletedPostId = post.getId();
+        LocalDateTime postCreatedAt = post.getCreatedAt();
+        String postedAtText = postCreatedAt == null
+                ? "không rõ thời gian"
+                : postCreatedAt.format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
+
         postRepository.delete(post);
+
+        if (author != null) {
+            notificationService.createAndSend(
+                    author.getId(),
+                    currentAdmin == null ? null : currentAdmin.getId(),
+                    "Hệ thống quản trị",
+                    "POST_DELETED_BY_ADMIN",
+                    deletedPostId,
+                    "Bài đăng lúc " + postedAtText + " của bạn đã bị admin xóa. Lý do: " + cleanReason,
+                    "/notifications"
+            );
+        }
     }
 
     @Override

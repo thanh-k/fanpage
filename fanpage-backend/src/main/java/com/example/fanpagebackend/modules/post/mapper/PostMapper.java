@@ -91,6 +91,7 @@ public class PostMapper {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .postId(comment.getPost().getId())
+                .parentId(comment.getParent() != null ? comment.getParent().getId() : null)
                 .content(comment.getContent())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())

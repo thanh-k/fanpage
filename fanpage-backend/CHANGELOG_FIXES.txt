@@ -1,0 +1,25 @@
+Các chỉnh sửa đã thực hiện:
+
+1. Trang chủ - thanh Bạn bè:
+- Thanh Bạn bè bên phải hiển thị tối đa 5 người đã nhắn tin gần nhất.
+- Lấy dữ liệu từ danh sách conversations đã sắp xếp theo lastMessageAt.
+- Khung Bạn bè được ghim sticky khi cuộn trang.
+
+2. Trang chủ - popup chọn cảm xúc:
+- Chỉnh lại khung reaction picker: căn giữa phía trên nút cảm xúc, bo tròn đẹp hơn, padding/gap đều hơn.
+- Tăng kích thước icon, thêm hover nâng icon và shadow.
+
+3. Messenger dropdown:
+- Mặc định chỉ hiển thị 5 đoạn chat mới nhất.
+- Khi cuộn xuống cuối danh sách sẽ hiển thị thêm 5 đoạn chat tiếp theo.
+- Ô "Tìm kiếm trên Messenger" đã đổi thành input thật.
+- Tìm kiếm ưu tiên bạn bè trước, sau đó mới hiển thị kết quả đoạn chat/tin nhắn.
+
+4. Backend:
+- API GET /api/chats/conversations hỗ trợ thêm limit và offset.
+- Giữ tương thích cũ: nếu không truyền limit thì trả về toàn bộ như trước.
+
+Admin update:
+- API DELETE /api/admin/posts/{postId} nhận thêm body { reason }.
+- Bắt buộc lý do xóa tối thiểu 5 ký tự.
+- Khi admin xóa bài viết, backend gửi notification realtime cho chủ bài viết với thời gian đăng và lý do xóa.

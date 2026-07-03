@@ -38,6 +38,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("select p from Post p where p.author.id not in :excludedUserIds and p.anonymous = false order by p.createdAt desc")
     Page<Post> findStrangerPosts(@Param("excludedUserIds") java.util.List<Long> excludedUserIds, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"author", "mediaList"})
+    @Query("select p from Post p where p.anonymous = false and lower(p.content) like lower(concat('%', :keyword, '%')) order by p.createdAt desc")
+    Page<Post> searchPublicPosts(@Param("keyword") String keyword, Pageable pageable);
+
     @Modifying
     @Query("delete from Post p where p.author = :user")
     void deleteByAuthor(@Param("user") User user);

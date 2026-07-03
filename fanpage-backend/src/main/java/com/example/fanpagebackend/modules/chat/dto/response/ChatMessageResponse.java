@@ -14,6 +14,7 @@ public class ChatMessageResponse {
     private String content;
     private boolean mine;
     private boolean read;
+    private boolean revoked;
     private LocalDateTime createdAt;
     private LocalDateTime readAt;
 }

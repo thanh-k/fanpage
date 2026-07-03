@@ -1,6 +1,7 @@
 package com.example.fanpagebackend.modules.like.service.impl;
 
 import com.example.fanpagebackend.modules.like.dto.response.LikeToggleResponse;
+import com.example.fanpagebackend.modules.like.dto.response.ReactionUserResponse;
 import com.example.fanpagebackend.modules.like.entity.PostLike;
 import com.example.fanpagebackend.modules.like.entity.ReactionType;
 import com.example.fanpagebackend.modules.like.repository.PostLikeRepository;
@@ -82,6 +83,22 @@ public class LikeServiceImpl implements LikeService {
                 .reactionType(reacted ? savedReaction.getReactionType().name() : null)
                 .reactionCounts(buildReactionCounts(post))
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReactionUserResponse> getReactionUsers(Long postId) {
+        Post post = postService.getPostEntity(postId);
+        return postLikeRepository.findByPost(post).stream()
+                .map(item -> ReactionUserResponse.builder()
+                        .userId(item.getUser().getId())
+                        .name(item.getUser().getFullName())
+                        .username(item.getUser().getUsername())
+                        .avatar(item.getUser().getAvatar())
+                        .reactionType(item.getReactionType() != null ? item.getReactionType().name() : ReactionType.LIKE.name())
+                        .reactedAt(item.getCreatedAt())
+                        .build())
+                .toList();
     }
 
     private PostLike createReactionSafely(Post post, User currentUser, ReactionType reactionType) {

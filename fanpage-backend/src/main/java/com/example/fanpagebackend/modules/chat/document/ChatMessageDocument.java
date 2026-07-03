@@ -39,6 +39,11 @@ public class ChatMessageDocument {
 
     private LocalDateTime readAt;
 
+    @Builder.Default
+    private boolean revoked = false;
+
+    private LocalDateTime revokedAt;
+
     @CreatedDate
     private LocalDateTime createdAt;
 }

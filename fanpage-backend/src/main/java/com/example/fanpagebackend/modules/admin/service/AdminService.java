@@ -53,7 +53,7 @@ public interface AdminService {
     void deleteRole(Long roleId);
     PageResponse<AdminPostResponse> getPosts(int page, int size);
     AdminPostResponse updatePostStatus(Long postId, String status);
-    void deletePost(Long postId);
+    void deletePost(Long postId, String reason);
     PageResponse<AdminCommentResponse> getComments(int page, int size);
     void deleteComment(Long commentId);
     PageResponse<AdminReportResponse> getReports(int page, int size);

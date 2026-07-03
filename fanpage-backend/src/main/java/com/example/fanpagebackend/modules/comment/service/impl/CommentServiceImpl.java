@@ -42,10 +42,18 @@ public class CommentServiceImpl implements CommentService {
         User currentUser = securityUtil.getCurrentUser();
         Post post = postService.getPostEntity(postId);
 
+        Comment parent = null;
+        if (request.getParentId() != null) {
+            parent = commentRepository.findById(request.getParentId())
+                    .filter(item -> item.getPost().getId().equals(post.getId()))
+                    .orElseThrow(() -> new com.example.fanpagebackend.exception.NotFoundException("Không tìm thấy bình luận gốc"));
+        }
+
         Comment comment = Comment.builder()
                 .post(post)
                 .author(currentUser)
                 .content(request.getContent().trim())
+                .parent(parent)
                 .build();
 
         Comment savedComment = commentRepository.save(comment);

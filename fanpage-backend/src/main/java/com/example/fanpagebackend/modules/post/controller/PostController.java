@@ -52,9 +52,21 @@ public class PostController {
         );
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponse<PostResponse> updatePost(@PathVariable Long id, @Valid @RequestBody UpdatePostRequest request) {
         return ApiResponse.success("Cập nhật bài viết thành công", postService.updateMyPost(id, request));
+    }
+
+    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<PostResponse> updatePostMultipart(
+            @PathVariable Long id,
+            @RequestParam(value = "content", required = false) String content,
+            @RequestParam(value = "isAnonymous", defaultValue = "false") Boolean anonymous,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images,
+            @RequestPart(value = "videos", required = false) List<MultipartFile> videos,
+            @RequestParam(value = "keepExistingMedia", defaultValue = "true") Boolean keepExistingMedia
+    ) {
+        return ApiResponse.success("Cập nhật bài viết thành công", postService.updateMyPostMultipart(id, content, anonymous, images, videos, keepExistingMedia));
     }
 
     @DeleteMapping("/{id}")
